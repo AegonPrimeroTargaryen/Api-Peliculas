@@ -36,9 +36,9 @@ public class PeliculaServiceImpl implements PeliculaService {
     public ResponseEntity<PeliculaDtoRp> getPeliculaById(int id) {
         Optional<PeliculaEntity> result = peliculaRespository.findById((long) id);
         List<PeliculaDto> listPeliculas = new ArrayList<>();
-        result.ifPresent(peliculaEntity -> new PeliculaDto(Math.toIntExact(peliculaEntity.getId()),
+        result.ifPresent(peliculaEntity -> listPeliculas.add(new PeliculaDto(Math.toIntExact(peliculaEntity.getId()),
                 peliculaEntity.getTitulo(), peliculaEntity.getAnio(), peliculaEntity.getDirector(),
-                peliculaEntity.getGenero(), peliculaEntity.getSinopsis()));
+                peliculaEntity.getGenero(), peliculaEntity.getSinopsis())));
 
         return ResponseEntity.ok(setResponse(listPeliculas));
     }
