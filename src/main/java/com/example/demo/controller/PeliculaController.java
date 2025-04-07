@@ -6,12 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.sql.DataSource;
+
 
 @RestController
 @RequestMapping("/api/peliculas")
 public class PeliculaController {
-
     private final PeliculaService peliculaService;
 
     @Autowired
@@ -29,4 +29,6 @@ public class PeliculaController {
             @PathVariable int id) {
         return peliculaService.getPeliculaById(id);
     }
+
+
 }
