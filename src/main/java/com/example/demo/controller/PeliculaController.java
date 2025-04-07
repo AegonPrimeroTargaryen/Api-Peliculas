@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.PeliculaDtoRp;
 import com.example.demo.service.PeliculaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class PeliculaController {
     }
 
     @GetMapping
-    public List<PeliculaDtoRp> listPeliculas() {
+    public ResponseEntity<PeliculaDtoRp> listPeliculas() {
         return peliculaService.getListPeliculas();
     }
 
