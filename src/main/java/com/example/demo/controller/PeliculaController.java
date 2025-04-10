@@ -1,8 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.PeliculaDtoRp;
-import com.example.demo.repository.PeliculaRespository;
+import com.example.demo.dto.PeliculaDtoRq;
 import com.example.demo.service.PeliculaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ public class PeliculaController {
     private final PeliculaService peliculaService;
 
     @Autowired
-    public PeliculaController(PeliculaService peliculaService, PeliculaRespository peliculaRespository) {
+    public PeliculaController(PeliculaService peliculaService) {
         this.peliculaService = peliculaService;
     }
 
@@ -28,5 +29,8 @@ public class PeliculaController {
         return peliculaService.getPeliculaById(id);
     }
 
-
+    @PostMapping
+    public ResponseEntity<PeliculaDtoRp> insertarPelicula(@RequestBody @Valid PeliculaDtoRq rq){
+        return peliculaService.insertarPelicula(rq);
+    }
 }

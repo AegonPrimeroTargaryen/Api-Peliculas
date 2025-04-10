@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class PeliculaDtoRp extends ResponseDto {
-    @JsonProperty("peliculas")
-    private List<PeliculaDto> peliculas;
+public class ErrorDtoRp extends ResponseDto {
+    @JsonProperty("detalle")
+    private Object detalle;
 }
