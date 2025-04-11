@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.PeliculaDtoRp;
 import com.example.demo.dto.PeliculaDtoRq;
+import com.example.demo.exception.ControlExcepcion;
 import com.example.demo.service.PeliculaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +36,13 @@ public class PeliculaController {
     }
 
     @DeleteMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<PeliculaDtoRp> eliminarPelicula(@PathVariable int id) {
+    public ResponseEntity<PeliculaDtoRp> eliminarPelicula(@PathVariable int id) throws ControlExcepcion {
         return peliculaService.eliminarPelicula(id);
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<PeliculaDtoRp> actualizarPelicula(@PathVariable int id, @RequestBody @Valid PeliculaDtoRq rq){
+    public ResponseEntity<PeliculaDtoRp> actualizarPelicula(@PathVariable int id, @RequestBody @Valid PeliculaDtoRq rq)
+            throws ControlExcepcion {
         return peliculaService.actualizarPelicula(id, rq);
     }
 }

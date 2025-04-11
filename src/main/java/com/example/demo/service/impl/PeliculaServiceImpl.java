@@ -4,6 +4,7 @@ import com.example.demo.dto.PeliculaDto;
 import com.example.demo.dto.PeliculaDtoRp;
 import com.example.demo.dto.PeliculaDtoRq;
 import com.example.demo.entity.PeliculaEntity;
+import com.example.demo.exception.ControlExcepcion;
 import com.example.demo.repository.PeliculaRespository;
 import com.example.demo.service.PeliculaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,26 +58,20 @@ public class PeliculaServiceImpl implements PeliculaService {
     }
 
     @Override
-    public ResponseEntity<PeliculaDtoRp> eliminarPelicula(int id){
+    public ResponseEntity<PeliculaDtoRp> eliminarPelicula(int id) throws ControlExcepcion{
         Optional<PeliculaEntity> result = peliculaRespository.findById((long) id);
-        PeliculaDtoRp peliculaDtoRp = new PeliculaDtoRp();
         if(result.isEmpty()){
-            peliculaDtoRp.setStatus("NOK");
-            peliculaDtoRp.setCodigo(1);
-            return new ResponseEntity<>(peliculaDtoRp,HttpStatus.NOT_FOUND);
+            throw new ControlExcepcion();
         }
         peliculaRespository.delete(result.get());
         return ResponseEntity.noContent().build();
     }
 
     @Override
-    public ResponseEntity<PeliculaDtoRp> actualizarPelicula(int id, PeliculaDtoRq rq){
+    public ResponseEntity<PeliculaDtoRp> actualizarPelicula(int id, PeliculaDtoRq rq) throws ControlExcepcion{
         Optional<PeliculaEntity> result = peliculaRespository.findById((long) id);
-        PeliculaDtoRp peliculaDtoRp = new PeliculaDtoRp();
         if(result.isEmpty()){
-            peliculaDtoRp.setStatus("NOK");
-            peliculaDtoRp.setCodigo(1);
-            return new ResponseEntity<>(peliculaDtoRp,HttpStatus.NOT_FOUND);
+            throw new ControlExcepcion();
         }
         PeliculaEntity peliculaEntity = setPeliculaEntity(rq);
         peliculaEntity.setId((long) id);
