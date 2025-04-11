@@ -18,19 +18,29 @@ public class PeliculaController {
         this.peliculaService = peliculaService;
     }
 
-    @GetMapping
+    @GetMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<PeliculaDtoRp> obtenerPeliculas() {
-        return peliculaService.getListPeliculas();
+        return peliculaService.obtenerPeliculas();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<PeliculaDtoRp> buscarPeliculaById(
             @PathVariable int id) {
-        return peliculaService.getPeliculaById(id);
+        return peliculaService.buscarPeliculaById(id);
     }
 
-    @PostMapping
+    @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<PeliculaDtoRp> insertarPelicula(@RequestBody @Valid PeliculaDtoRq rq){
         return peliculaService.insertarPelicula(rq);
+    }
+
+    @DeleteMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<PeliculaDtoRp> eliminarPelicula(@PathVariable int id) {
+        return peliculaService.eliminarPelicula(id);
+    }
+
+    @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<PeliculaDtoRp> actualizarPelicula(@PathVariable int id, @RequestBody @Valid PeliculaDtoRq rq){
+        return peliculaService.actualizarPelicula(id, rq);
     }
 }

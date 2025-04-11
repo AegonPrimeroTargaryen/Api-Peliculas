@@ -8,6 +8,7 @@ import com.example.demo.repository.PeliculaRespository;
 import com.example.demo.service.PeliculaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class PeliculaServiceImpl implements PeliculaService {
     }
 
     @Override
-    public ResponseEntity<PeliculaDtoRp> getListPeliculas() {
+    public ResponseEntity<PeliculaDtoRp> obtenerPeliculas() {
         List<PeliculaDto> listPeliculas = new ArrayList<>();
 
         List<PeliculaEntity> peliculaEntityList = peliculaRespository.findAll(
@@ -35,26 +36,54 @@ public class PeliculaServiceImpl implements PeliculaService {
                 element.getTitulo(), element.getAnio(), element.getDirector(), element.getGenero(),
                 element.getSinopsis())));
 
-        return ResponseEntity.ok(setResponse(listPeliculas));
+        return ResponseEntity.ok(setPeliculaDtoRp(listPeliculas));
     }
 
     @Override
-    public ResponseEntity<PeliculaDtoRp> getPeliculaById(int id) {
+    public ResponseEntity<PeliculaDtoRp> buscarPeliculaById(int id) {
         Optional<PeliculaEntity> result = peliculaRespository.findById((long) id);
         List<PeliculaDto> listPeliculas = new ArrayList<>();
         result.ifPresent(peliculaEntity -> listPeliculas.add(new PeliculaDto(
                 Math.toIntExact(peliculaEntity.getId()), peliculaEntity.getTitulo(), peliculaEntity.getAnio(),
                 peliculaEntity.getDirector(), peliculaEntity.getGenero(), peliculaEntity.getSinopsis())));
 
-        return ResponseEntity.ok(setResponse(listPeliculas));
+        return ResponseEntity.ok(setPeliculaDtoRp(listPeliculas));
     }
 
     @Override
     public ResponseEntity<PeliculaDtoRp> insertarPelicula(PeliculaDtoRq rq){
-        return ResponseEntity.ok(setPeliculaDto(peliculaRespository.save(setPeliculaEntity(rq))));
+        return new ResponseEntity<>(setPeliculaDtoRp(peliculaRespository.save(setPeliculaEntity(rq))),
+                HttpStatus.CREATED);
     }
 
-    private PeliculaDtoRp setResponse(List<PeliculaDto> list){
+    @Override
+    public ResponseEntity<PeliculaDtoRp> eliminarPelicula(int id){
+        Optional<PeliculaEntity> result = peliculaRespository.findById((long) id);
+        PeliculaDtoRp peliculaDtoRp = new PeliculaDtoRp();
+        if(result.isEmpty()){
+            peliculaDtoRp.setStatus("NOK");
+            peliculaDtoRp.setCodigo(1);
+            return new ResponseEntity<>(peliculaDtoRp,HttpStatus.NOT_FOUND);
+        }
+        peliculaRespository.delete(result.get());
+        return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public ResponseEntity<PeliculaDtoRp> actualizarPelicula(int id, PeliculaDtoRq rq){
+        Optional<PeliculaEntity> result = peliculaRespository.findById((long) id);
+        PeliculaDtoRp peliculaDtoRp = new PeliculaDtoRp();
+        if(result.isEmpty()){
+            peliculaDtoRp.setStatus("NOK");
+            peliculaDtoRp.setCodigo(1);
+            return new ResponseEntity<>(peliculaDtoRp,HttpStatus.NOT_FOUND);
+        }
+        PeliculaEntity peliculaEntity = setPeliculaEntity(rq);
+        peliculaEntity.setId((long) id);
+        return ResponseEntity.ok(setPeliculaDtoRp(peliculaRespository.save(peliculaEntity)));
+    }
+
+    private PeliculaDtoRp setPeliculaDtoRp(List<PeliculaDto> list){
         PeliculaDtoRp response = new PeliculaDtoRp();
         response.setCodigo(0);
         response.setStatus("OK");
@@ -72,11 +101,11 @@ public class PeliculaServiceImpl implements PeliculaService {
         return peliculaEntity;
     }
 
-    private PeliculaDtoRp setPeliculaDto(PeliculaEntity peliculaEntity){
+    private PeliculaDtoRp setPeliculaDtoRp(PeliculaEntity peliculaEntity){
         List<PeliculaDto> listPeliculas = new ArrayList<>();
         listPeliculas.add(new PeliculaDto(Math.toIntExact(peliculaEntity.getId()), peliculaEntity.getTitulo(),
                 peliculaEntity.getAnio(), peliculaEntity.getDirector(), peliculaEntity.getGenero(),
                 peliculaEntity.getSinopsis()));
-        return setResponse(listPeliculas);
+        return setPeliculaDtoRp(listPeliculas);
     }
 }

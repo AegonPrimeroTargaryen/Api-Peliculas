@@ -2,7 +2,7 @@ package com.example.demo.exception;
 
 import com.example.demo.dto.ErrorDtoRp;
 import com.example.demo.dto.ParamsErrorDto;
-import com.example.demo.dto.ResponseDto;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,11 +18,12 @@ import java.util.List;
 public class RestExceptionHandler {
 
     @ExceptionHandler({NoResourceFoundException.class, HttpMessageNotReadableException.class,
-            MethodArgumentNotValidException.class})
+            MethodArgumentNotValidException.class, DataIntegrityViolationException.class})
     protected ResponseEntity<ErrorDtoRp> handleErrorException(Exception ex) {
         if (ex instanceof MethodArgumentNotValidException exTipo) return ResponseEntity.badRequest().body(paramErrorHandler(exTipo));
         if (ex instanceof HttpMessageNotReadableException) return ResponseEntity.badRequest().body(setResponseDto());
         if (ex instanceof NoResourceFoundException) return ResponseEntity.badRequest().body(setResponseDto());
+        if (ex instanceof DataIntegrityViolationException) return ResponseEntity.badRequest().body(setResponseDto());
         else return ResponseEntity.internalServerError().build();
     }
 
