@@ -17,12 +17,12 @@ WORKDIR /app
 # Copia el JAR de tu microservicio (asegúrate que el nombre coincida)
 COPY --from=builder /app/target/*.jar app.jar
 
-COPY wallet /app/wallet
-
-# Variables entorno
-ENV ORACLE_PATH_DATASOURCE="jdbc:oracle:thin:@dbaplicada_high?TNS_ADMIN=/app/wallet"
-ENV ORACLE_DB_USER=""
-ENV ORACLE_DB_PASS=""
+#COPY wallet /app/wallet
+#
+## Variables entorno
+#ENV ORACLE_PATH_DATASOURCE="jdbc:oracle:thin:@dbaplicada_high?TNS_ADMIN=/app/wallet"
+#ENV ORACLE_DB_USER=""
+#ENV ORACLE_DB_PASS=""
 
 # Expone el puerto (si tu microservicio usa el 8080 por ejemplo)
 EXPOSE 8080
