@@ -82,6 +82,10 @@
             <artifactId>osdt_cert</artifactId>
             <version>21.17.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
         <!--        -->
     </dependencies>
 
